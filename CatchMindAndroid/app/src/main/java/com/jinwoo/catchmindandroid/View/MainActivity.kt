@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 timer.text = "$timeMinute:$timeCounter"
                 if (timeMinute == 0 && timeCounter == 0){
-                    runOnUiThread { viewModel.timesUp() }
+                    runOnUiThread { viewModel.myWinRound() }
                 }
             }
         }

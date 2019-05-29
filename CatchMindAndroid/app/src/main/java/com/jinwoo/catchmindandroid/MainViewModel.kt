@@ -2,17 +2,14 @@ package com.jinwoo.catchmindandroid
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.jinwoo.catchmindandroid.Model.PassModel
 import com.jinwoo.catchmindandroid.Model.PlayerModel
 import com.jinwoo.catchmindandroid.Model.SettingModel
-import com.jinwoo.catchmindandroid.Util.Event
+import com.jinwoo.catchmindandroid.Util.SocketApplication
+import io.socket.emitter.Emitter
 
 class MainViewModel: ViewModel(){
 
-    val event = MutableLiveData<Event>()
-    val playerModel = MutableLiveData<PlayerModel>()
-    val settingModel = MutableLiveData<SettingModel>()
-    val passModel = MutableLiveData<PassModel>()
+    val settingModel = MutableLiveData<SettingModel>().apply { value = SettingModel }
 
     val clickedColor = MutableLiveData<String>()
     val eraserClickEvent = SingleLiveEvent<String>()
@@ -25,11 +22,17 @@ class MainViewModel: ViewModel(){
     val subChangeEvent = SingleLiveEvent<String>()
     val makeDialogEvent = SingleLiveEvent<String>()
 
+    val pass = Emitter.Listener { otherWinRound() }
+    val drawData = Emitter.Listener { word.value = it.get(0).toString() }
+
     init {
-        gameObjectSetting()
+        val socket = SocketApplication.socket
+
+        socket.emit("drawer")
+        socket.on("drawerData", drawData)
+        socket.on("pass", pass)
+
         gameTextSetting()
-        checkPass()
-        event.value!!.receivePass()
     }
 
     fun colorClick(colorNum: Int) {
@@ -52,49 +55,27 @@ class MainViewModel: ViewModel(){
 
     fun eraserClick() = eraserClickEvent.call()
 
-    fun gameObjectSetting(){
-        event.value = Event
-        playerModel.value = PlayerModel
-        settingModel.value = SettingModel
-        passModel.value = PassModel
-    }
-
     fun gameTextSetting() {
-        word.value = playerModel.value!!.word
-
-        this.round.value = "ROUND ${settingModel.value!!.round}"
-        this.myScore.value = settingModel.value!!.myScore.toString()
-        this.otherScore.value = settingModel.value!!.otherScore.toString()
+        round.value = "ROUND ${settingModel.value!!.round}"
+        myScore.value = settingModel.value!!.myScore.toString()
+        otherScore.value = settingModel.value!!.otherScore.toString()
     }
 
-    fun checkPass(){ // 옵저빙 패턴이나 rxJava 넣으면 더 좋은 코드가 될 듯
-        Thread{
-            while(true){
-                if(passModel.value!!.pass) {
-                    endRound()
-                    event.value!!.roundChange()
-                    subChangeEvent.call()
-                    endCheck()
-                    break
-                }
-            }
-        }
-    }
-
-    fun endRound(){
+    fun otherWinRound(){
         settingModel.value!!.otherScore += 10
         settingModel.value!!.round += 1
+        endCheck()
+    }
+
+    fun myWinRound(){
+        settingModel.value!!.myScore += 10
+        settingModel.value!!.round += 1
+        endCheck()
     }
 
     fun endCheck(){
         if(settingModel.value!!.round > 5)
             makeDialogEvent.call()
         else subChangeEvent.call()
-    }
-
-    fun timesUp() {
-        settingModel.value!!.round += 1
-        event.value!!.roundChange()
-        endCheck()
     }
 }

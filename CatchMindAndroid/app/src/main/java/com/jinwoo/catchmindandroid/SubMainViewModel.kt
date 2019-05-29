@@ -2,7 +2,6 @@ package com.jinwoo.catchmindandroid
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.jinwoo.catchmindandroid.Model.PassModel
 import com.jinwoo.catchmindandroid.Model.PlayerModel
 import com.jinwoo.catchmindandroid.Model.SettingModel
 import com.jinwoo.catchmindandroid.Util.Event
@@ -12,7 +11,6 @@ class SubMainViewModel: ViewModel(){
     val event = MutableLiveData<Event>()
     val playerModel = MutableLiveData<PlayerModel>()
     val settingModel = MutableLiveData<SettingModel>()
-    val passModel = MutableLiveData<PassModel>()
 
     val answer = MutableLiveData<String>()
     val round = MutableLiveData<String>()
@@ -41,7 +39,6 @@ class SubMainViewModel: ViewModel(){
         event.value = Event
         playerModel.value = PlayerModel
         settingModel.value = SettingModel
-        passModel.value = PassModel
     }
 
     fun gameTextSetting() {
