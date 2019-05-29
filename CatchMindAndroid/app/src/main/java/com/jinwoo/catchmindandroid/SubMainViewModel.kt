@@ -14,7 +14,6 @@ class SubMainViewModel: ViewModel(){
     val settingModel = MutableLiveData<SettingModel>()
     val passModel = MutableLiveData<PassModel>()
 
-    val timeString = MutableLiveData<String>()
     val answer = MutableLiveData<String>()
     val round = MutableLiveData<String>()
     val myScore = MutableLiveData<String>()
@@ -24,14 +23,8 @@ class SubMainViewModel: ViewModel(){
     val makeDialogEvent = SingleLiveEvent<String>()
 
     init {
-        event.value = Event
-        playerModel.value = PlayerModel
-        settingModel.value = SettingModel
-        passModel.value = PassModel
-        timeString.value = "1:30"
-
-        gameSetting()
-        timer()
+        gameObjectSetting()
+        gameTextSetting()
     }
 
     fun answerCheck() {
@@ -44,30 +37,14 @@ class SubMainViewModel: ViewModel(){
         }
     }
 
-    fun timer(){
-        var timeCounter = 30
-        var timeMinute = 1
-        Thread{
-            while (true) {
-                Thread.sleep(1000)
-                timeCounter--
-                if (timeCounter < 0) {
-                    timeCounter = 59
-                    timeMinute--
-                }
-                timeString.value = "$timeMinute:$timeCounter"
-                if (timeMinute == 0 && timeCounter == 0) {
-                    break
-                }
-            }
-            settingModel.value!!.round += 1
-            event.value!!.roundChange()
-            mainChangeEvent.call()
-            endCheck()
-        }
+    fun gameObjectSetting(){
+        event.value = Event
+        playerModel.value = PlayerModel
+        settingModel.value = SettingModel
+        passModel.value = PassModel
     }
 
-    fun gameSetting(){
+    fun gameTextSetting() {
         this.round.value = "ROUND ${settingModel.value!!.round}"
         this.myScore.value = settingModel.value!!.myScore.toString()
         this.otherScore.value = settingModel.value!!.otherScore.toString()
@@ -79,7 +56,14 @@ class SubMainViewModel: ViewModel(){
     }
 
     fun endCheck(){
-        if(settingModel.value!!.round == 5)
+        if(settingModel.value!!.round > 5)
             makeDialogEvent.call()
+        else mainChangeEvent.call()
+    }
+
+    fun timesUp() {
+        settingModel.value!!.round += 1
+        event.value!!.roundChange()
+        endCheck()
     }
 }

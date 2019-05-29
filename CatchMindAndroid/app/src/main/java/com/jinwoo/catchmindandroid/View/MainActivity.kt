@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.WindowManager
 import com.jinwoo.catchmindandroid.MainViewModel
 import com.jinwoo.catchmindandroid.R
@@ -13,6 +14,8 @@ import com.jinwoo.catchmindandroid.Util.DrawClass
 import com.jinwoo.catchmindandroid.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
+import java.util.*
+import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,17 +33,36 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.eraserClickEvent.observe(this, Observer {
             drawClass.setColor(Color.parseColor("#FFFFFF"), 50f)
         })
-        mainViewModel.subChangeEvent.observe(this, Observer { startActivity<SubMainActivity>() })
+        mainViewModel.subChangeEvent.observe(this, Observer {
+            startActivity<SubMainActivity>()
+            finish()
+        })
         mainViewModel.makeDialogEvent.observe(this, Observer { makeDialog() })
+
+        timer(mainViewModel)
+
         binding.mainViewModel = mainViewModel
     }
 
-    fun makeDialog(){
-        val dialog = EndDialog(this)
-        var params: WindowManager.LayoutParams = dialog.window.attributes
-        params.width = WindowManager.LayoutParams.WRAP_CONTENT
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog.window.attributes = params
-        dialog.show()
+    fun makeDialog() = EndDialog().show(supportFragmentManager, "game end")
+
+    fun timer(viewModel: MainViewModel) {
+        var timeCounter = 5
+        var timeMinute = 0
+        timer.text = "$timeMinute:$timeCounter"
+        Timer("settingUp", false).schedule(1000) {
+            while(true) {
+                Thread.sleep(1000)
+                timeCounter--
+                if (timeCounter < 0) {
+                    timeCounter = 59
+                    timeMinute--
+                }
+                timer.text = "$timeMinute:$timeCounter"
+                if (timeMinute == 0 && timeCounter == 0){
+                    runOnUiThread { viewModel.timesUp() }
+                }
+            }
+        }
     }
 }
