@@ -3,11 +3,8 @@ package com.jinwoo.catchmindandroid.View
 import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.WindowManager
 import com.jinwoo.catchmindandroid.MainViewModel
 import com.jinwoo.catchmindandroid.R
 import com.jinwoo.catchmindandroid.Util.DrawClass

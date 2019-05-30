@@ -5,13 +5,13 @@ import android.graphics.*
 import android.view.View
 import android.graphics.Bitmap
 import android.util.Log
-import com.jinwoo.catchmindandroid.Model.DrawModel
+import io.socket.client.Socket
+import io.socket.emitter.Emitter
 
 
 class AutoDrawClass(context: Context) : View(context) {
 
-    val eventClass: Event by lazy { Event }
-    val drawModel: DrawModel by lazy { DrawModel }
+    val socket: Socket by lazy { SocketApplication.socket }
 
     val paintColor: Int = Color.parseColor("#000000")
 
@@ -20,22 +20,14 @@ class AutoDrawClass(context: Context) : View(context) {
     var canvasPaint: Paint? = null
     var drawCanvas: Canvas? = null
     var canvasBitmap: Bitmap? = null
-    var checked: Boolean = false
+
+    var actionDown = Emitter.Listener { args ->
+        Event(args[0] as Float, args[1] as Float, args[2] as Int, args[3] as Float, args[4] as String)
+    }
 
     init {
         setupDrawing()
-        Thread{
-            while (true) {
-                checked = eventClass.receiveLine()
-                if(checked){
-                    drawPaint!!.color = drawModel.color
-                    drawPaint!!.strokeWidth = drawModel.width
-                    Event(drawModel.x, drawModel.y, drawModel.eventName)
-                }
-                checked = false
-                // rxjava의 옵저빙 안써서 이렇게 했네요. 옵저버 패턴을 쓰기에는 애매해서...
-            }
-        }
+        socket.on("Action", actionDown)
     }
 
     fun setupDrawing() {
@@ -59,16 +51,22 @@ class AutoDrawClass(context: Context) : View(context) {
         canvas.drawPath(drawPath, drawPaint)
     }
 
-    fun Event(touchX: Float, touchY: Float, eventName: String?){
+    fun Event(touchX: Float, touchY: Float, color: Int, strokeWidth: Float,eventName: String){
         Log.e("fgdfgf", "$touchX, $touchY, $eventName")
         when (eventName) {
             "ACTION_DOWN" -> {
+                drawPaint!!.color = color
+                drawPaint!!.strokeWidth = strokeWidth
                 drawPath!!.moveTo(touchX, touchY)
             }
             "ACTION_MOVE" -> {
+                drawPaint!!.color = color
+                drawPaint!!.strokeWidth = strokeWidth
                 drawPath!!.lineTo(touchX, touchY)
             }
             "ACTION_UP" -> {
+                drawPaint!!.color = color
+                drawPaint!!.strokeWidth = strokeWidth
                 drawPath!!.lineTo(touchX, touchY)
                 drawCanvas!!.drawPath(drawPath, drawPaint)
                 drawPath!!.reset()

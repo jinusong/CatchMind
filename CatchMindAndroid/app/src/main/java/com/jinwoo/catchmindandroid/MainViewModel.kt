@@ -2,14 +2,15 @@ package com.jinwoo.catchmindandroid
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.jinwoo.catchmindandroid.Model.PlayerModel
-import com.jinwoo.catchmindandroid.Model.SettingModel
+import com.jinwoo.catchmindandroid.Model.GameData
 import com.jinwoo.catchmindandroid.Util.SocketApplication
 import io.socket.emitter.Emitter
 
 class MainViewModel: ViewModel(){
 
-    val settingModel = MutableLiveData<SettingModel>().apply { value = SettingModel }
+    val socket = SocketApplication.socket
+
+    val gameData = MutableLiveData<GameData>().apply { value = GameData }
 
     val clickedColor = MutableLiveData<String>()
     val eraserClickEvent = SingleLiveEvent<String>()
@@ -23,14 +24,12 @@ class MainViewModel: ViewModel(){
     val makeDialogEvent = SingleLiveEvent<String>()
 
     val pass = Emitter.Listener { otherWinRound() }
-    val drawData = Emitter.Listener { word.value = it.get(0).toString() }
+    val wordData = Emitter.Listener { word.value = it.get(0).toString() }
 
     init {
-        val socket = SocketApplication.socket
-
-        socket.emit("drawer")
-        socket.on("drawerData", drawData)
-        socket.on("pass", pass)
+        socket.emit("DrawerStart")
+        socket.on("WordData", wordData)
+        socket.on("Pass", pass)
 
         gameTextSetting()
     }
@@ -56,25 +55,25 @@ class MainViewModel: ViewModel(){
     fun eraserClick() = eraserClickEvent.call()
 
     fun gameTextSetting() {
-        round.value = "ROUND ${settingModel.value!!.round}"
-        myScore.value = settingModel.value!!.myScore.toString()
-        otherScore.value = settingModel.value!!.otherScore.toString()
+        round.value = "ROUND ${gameData.value!!.round}"
+        myScore.value = gameData.value!!.myScore.toString()
+        otherScore.value = gameData.value!!.otherScore.toString()
     }
 
     fun otherWinRound(){
-        settingModel.value!!.otherScore += 10
-        settingModel.value!!.round += 1
+        gameData.value!!.otherScore += 10
+        gameData.value!!.round += 1
         endCheck()
     }
 
     fun myWinRound(){
-        settingModel.value!!.myScore += 10
-        settingModel.value!!.round += 1
+        gameData.value!!.myScore += 10
+        gameData.value!!.round += 1
         endCheck()
     }
 
     fun endCheck(){
-        if(settingModel.value!!.round > 5)
+        if(gameData.value!!.round > 5)
             makeDialogEvent.call()
         else subChangeEvent.call()
     }

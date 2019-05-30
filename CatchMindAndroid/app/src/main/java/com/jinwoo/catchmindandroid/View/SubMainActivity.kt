@@ -4,8 +4,6 @@ import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.WindowManager
-import com.jinwoo.catchmindandroid.MainViewModel
 import com.jinwoo.catchmindandroid.R
 import com.jinwoo.catchmindandroid.SubMainViewModel
 import com.jinwoo.catchmindandroid.Util.AutoDrawClass
@@ -51,7 +49,7 @@ class SubMainActivity : AppCompatActivity() {
                 }
                 timer.text = "$timeMinute:$timeCounter"
                 if (timeMinute == 0 && timeCounter == 0){
-                    runOnUiThread { viewModel.timesUp() }
+                    runOnUiThread { viewModel.otherWinRound() }
                 }
             }
         }
