@@ -11,6 +11,8 @@ class DialogViewModel: ViewModel(){
     val socket: Socket by lazy { SocketApplication.socket }
     val settingModel: GameData by lazy { GameData }
 
+    val myScore = MutableLiveData<String>().apply { GameData.myScore }
+    val otherScore = MutableLiveData<String>().apply { GameData.otherScore }
     var result = MutableLiveData<String>()
 
     init {

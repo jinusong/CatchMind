@@ -27,9 +27,9 @@ class MainViewModel: ViewModel(){
     val wordData = Emitter.Listener { word.value = it.get(0).toString() }
 
     init {
-        socket.emit("DrawerStart")
-        socket.on("WordData", wordData)
-        socket.on("Pass", pass)
+        socket.emit("roundStart")
+        socket.on("wordData", wordData)
+        socket.on("pass", pass)
 
         gameTextSetting()
     }

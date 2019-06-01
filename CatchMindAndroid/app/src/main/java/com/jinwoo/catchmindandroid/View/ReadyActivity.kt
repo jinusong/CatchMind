@@ -10,16 +10,22 @@ import org.jetbrains.anko.startActivity
 
 class ReadyActivity: AppCompatActivity(){
 
-    val socket: Socket by lazy { SocketApplication.socket }
+    val socket: Socket = SocketApplication.socket
 
     val start = Emitter.Listener { args ->
         if (args[0] as Boolean) startActivity<MainActivity>()
         else startActivity<SubMainActivity>()
+        finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ready)
+        socket.connect()
+    }
+
+    override fun onStart() {
+        super.onStart()
         socket.emit("ready")
         socket.on("start", start)
     }

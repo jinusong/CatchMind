@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import org.json.JSONObject
 
 
 class AutoDrawClass(context: Context) : View(context) {
@@ -22,12 +23,17 @@ class AutoDrawClass(context: Context) : View(context) {
     var canvasBitmap: Bitmap? = null
 
     var actionDown = Emitter.Listener { args ->
-        Event(args[0] as Float, args[1] as Float, args[2] as Int, args[3] as Float, args[4] as String)
+        val jsonObject = args[0] as JSONObject
+        Event(jsonObject.getDouble("x").toFloat()
+            , jsonObject.getDouble("y").toFloat()
+            , jsonObject.getInt("color")
+            , jsonObject.getDouble("width").toFloat()
+            , jsonObject.getString("eventName"))
     }
 
     init {
         setupDrawing()
-        socket.on("Action", actionDown)
+        socket.on("action", actionDown)
     }
 
     fun setupDrawing() {
@@ -71,11 +77,7 @@ class AutoDrawClass(context: Context) : View(context) {
                 drawCanvas!!.drawPath(drawPath, drawPaint)
                 drawPath!!.reset()
             }
-            else -> false
         }
-
-        invalidate()
-        true
     }
 
 }

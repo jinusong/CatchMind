@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.jinwoo.catchmindandroid.Model.GameData
 import com.jinwoo.catchmindandroid.Util.SocketApplication
+import io.socket.emitter.Emitter
 
 class SubMainViewModel: ViewModel(){
 
@@ -21,13 +22,17 @@ class SubMainViewModel: ViewModel(){
     val mainChangeEvent = SingleLiveEvent<String>()
     val makeDialogEvent = SingleLiveEvent<String>()
 
+    val wordData = Emitter.Listener { word.value = it.get(0).toString() }
+
     init {
+        socket.emit("roundStart")
+        socket.on("wordData", wordData)
         gameTextSetting()
     }
 
     fun answerCheck() {
         if(answer.value == word.value){
-            socket.emit("Pass")
+            socket.emit("pass")
             myWinRound()
         }
     }

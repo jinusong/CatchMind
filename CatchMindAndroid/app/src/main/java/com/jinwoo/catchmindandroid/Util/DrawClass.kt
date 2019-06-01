@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.graphics.Bitmap
 import io.socket.client.Socket
+import org.json.JSONObject
 
 class DrawClass(context: Context) : View(context) {
     val socket: Socket by lazy { SocketApplication.socket }
@@ -54,15 +55,33 @@ class DrawClass(context: Context) : View(context) {
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                socket.emit("Action", arrayListOf(touchX, touchY, drawPaint!!.color, drawPaint!!.strokeWidth, "ACTION_DOWN"))
+                socket.emit("action", JSONObject()
+                    .put("x", touchX)
+                    .put("y", touchY)
+                    .put("color", drawPaint!!.color)
+                    .put("width", drawPaint!!.strokeWidth)
+                    .put("eventName", "ACTION_DOWN"))
+
                 drawPath!!.moveTo(touchX, touchY)
             }
             MotionEvent.ACTION_MOVE -> {
-                socket.emit("Action", arrayListOf(touchX, touchY, drawPaint!!.color, drawPaint!!.strokeWidth, "ACTION_MOVE"))
+                socket.emit("action", JSONObject()
+                    .put("x", touchX)
+                    .put("y", touchY)
+                    .put("color", drawPaint!!.color)
+                    .put("width", drawPaint!!.strokeWidth)
+                    .put("eventName", "ACTION_MOVE"))
+
                 drawPath!!.lineTo(touchX, touchY)
             }
             MotionEvent.ACTION_UP -> {
-                socket.emit("Action", arrayListOf(touchX, touchY, drawPaint!!.color, drawPaint!!.strokeWidth, "ACTION_UP"))
+                socket.emit("action", JSONObject()
+                    .put("x", touchX)
+                    .put("y", touchY)
+                    .put("color", drawPaint!!.color)
+                    .put("width", drawPaint!!.strokeWidth)
+                    .put("eventName", "ACTION_UP"))
+
                 drawPath!!.lineTo(touchX, touchY)
                 drawCanvas!!.drawPath(drawPath, drawPaint)
                 drawPath!!.reset()
