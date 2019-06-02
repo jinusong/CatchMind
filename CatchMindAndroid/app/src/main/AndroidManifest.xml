@@ -11,7 +11,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".View.StartActivity"
+        <activity android:name=".ui.activity.StartActivity"
                   android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,11 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".View.ReadyActivity"
+        <activity android:name=".ui.activity.ReadyActivity"
                   android:screenOrientation="landscape"/>
-        <activity android:name=".View.SubMainActivity"
+        <activity android:name=".ui.activity.SubMainActivity"
                   android:screenOrientation="landscape"/>
-        <activity android:name=".View.MainActivity"
+        <activity android:name=".ui.activity.MainActivity"
                   android:screenOrientation="landscape"/>
     </application>
 

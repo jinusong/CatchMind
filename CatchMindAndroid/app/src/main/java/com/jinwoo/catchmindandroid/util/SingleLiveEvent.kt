@@ -1,4 +1,4 @@
-package com.jinwoo.catchmindandroid
+package com.jinwoo.catchmindandroid.util
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.MutableLiveData

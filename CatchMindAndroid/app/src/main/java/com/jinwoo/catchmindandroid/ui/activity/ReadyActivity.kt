@@ -1,9 +1,9 @@
-package com.jinwoo.catchmindandroid.View
+package com.jinwoo.catchmindandroid.ui.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.jinwoo.catchmindandroid.R
-import com.jinwoo.catchmindandroid.Util.SocketApplication
+import com.jinwoo.catchmindandroid.util.SocketApplication
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import org.jetbrains.anko.startActivity

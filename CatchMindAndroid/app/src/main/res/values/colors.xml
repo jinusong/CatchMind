@@ -14,7 +14,7 @@
     <color name="colorRed">#FF8585</color>
     <color name="colorSky">#ABF9F4</color>
     <color name="colorwordBlue">#648CBA</color>
-    <color name="colorYellow">#D81B60</color>
-    <color name="colorYellowGreen">#FBFB8E</color>
+    <color name="colorDeepRed">#D81B60</color>
+    <color name="colorYellow">#FBFB8E</color>
     <color name="colorAmethyst">#D784FF</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.jinwoo.catchmindandroid.Util
+package com.jinwoo.catchmindandroid.util
 
 import android.content.Context
 import android.graphics.*
