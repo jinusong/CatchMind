@@ -20,7 +20,7 @@ io.on('connection', client => {
 
     var wordDatas = new Array();
 
-    for(var i = 0; i < 5; i++) {
+    for(var i = 0; i < 6; i++) {
         wordDatas[i] = randomitem(words);
     }
 
@@ -50,7 +50,7 @@ io.on('connection', client => {
 
     client.on('pass', data => {
         console.log('pass');
-        drawer.emit('pass');
+        io.emit('pass');
         var flag = drawer;
         drawer = solver;
         solver = flag;
@@ -64,6 +64,7 @@ io.on('connection', client => {
 
             solver = null;
             drawer = null;
+            console.log("초기화됨");
         }
         console.log(count);
     })
