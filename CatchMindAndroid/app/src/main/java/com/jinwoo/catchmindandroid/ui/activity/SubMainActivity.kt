@@ -30,7 +30,7 @@ class SubMainActivity : AppCompatActivity(), SubMainContract.View {
     object: Handler() {
         override fun handleMessage(msg: Message?) {
             if (msg!!.what == 1) timer.text = "$timeMinute:$timeCounter"
-            else presenter.timeOut()
+            else if (msg.what == 2) presenter.timeOut()
         }
     }
 
@@ -80,5 +80,10 @@ class SubMainActivity : AppCompatActivity(), SubMainContract.View {
                     timerHandler.obtainMessage(2).sendToTarget()
             }
         }, 0 , 1000)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timer().cancel()
     }
 }

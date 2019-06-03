@@ -75,7 +75,6 @@
         android:fontFamily="@font/nanumsquarebold"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:gravity="center_horizontal"
-        android:onClick="endClick"/>
+        android:gravity="center_horizontal"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -14,19 +14,19 @@ class SubMainPresenter(val view: SubMainContract.View): SubMainContract.Presente
         gameData.word = it.get(0).toString()
         view.gameSetText(gameData)
     }
+    val pass = Emitter.Listener { myWinRound() }
 
     override fun socketLogicSetting() {
         socket.emit("roundStart")
         socket.on("wordData", wordData)
+        socket.on("pass", pass)
     }
 
     override fun timeOut() = otherWinRound()
 
     override fun answerCheck(word: String) {
-        if(gameData.word  == word){
+        if(gameData.word  == word)
             socket.emit("pass")
-            myWinRound()
-        }
     }
 
     fun otherWinRound(){
@@ -43,6 +43,9 @@ class SubMainPresenter(val view: SubMainContract.View): SubMainContract.Presente
 
     fun endCheck(){
         if(gameData.round > 5) view.makeDialog()
-        else view.startMain()
+        else {
+            socket.off()
+            view.startMain()
+        }
     }
 }

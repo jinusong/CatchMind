@@ -1,9 +1,7 @@
 package com.jinwoo.catchmindandroid.presenter
 
-import android.arch.lifecycle.MutableLiveData
 import com.jinwoo.catchmindandroid.contract.MainContact
 import com.jinwoo.catchmindandroid.util.GameData
-import com.jinwoo.catchmindandroid.util.SingleLiveEvent
 import com.jinwoo.catchmindandroid.util.SocketApplication
 import io.socket.emitter.Emitter
 
@@ -18,7 +16,6 @@ class MainPresenter(val view: MainContact.View): MainContact.Presenter {
         GameData.word = it.get(0).toString()
         view.gameSetText(gameData)
     }
-
     override fun socketLogicSetting() {
         socket.emit("roundStart")
         socket.on("wordData", wordData)
@@ -41,6 +38,9 @@ class MainPresenter(val view: MainContact.View): MainContact.Presenter {
 
     fun endCheck(){
         if(gameData.round > 5) view.makeDialog()
-        else view.startSubMain()
+        else {
+            socket.off()
+            view.startSubMain()
+        }
     }
 }
