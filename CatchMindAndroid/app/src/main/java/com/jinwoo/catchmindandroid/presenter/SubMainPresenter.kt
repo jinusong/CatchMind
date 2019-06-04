@@ -3,13 +3,11 @@ package com.jinwoo.catchmindandroid.presenter
 import com.jinwoo.catchmindandroid.contract.SubMainContract
 import com.jinwoo.catchmindandroid.util.GameData
 import com.jinwoo.catchmindandroid.util.SocketApplication
+import io.socket.client.Socket
 import io.socket.emitter.Emitter
 
-class SubMainPresenter(val view: SubMainContract.View): SubMainContract.Presenter{
+class SubMainPresenter(val view: SubMainContract.View, val socket: Socket, val gameData: GameData): SubMainContract.Presenter{
 
-    val socket = SocketApplication.socket
-
-    val gameData = GameData
     val wordData =  Emitter.Listener {
         gameData.word = it.get(0).toString()
         view.gameSetText(gameData)

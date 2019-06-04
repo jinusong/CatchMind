@@ -13,18 +13,30 @@ import com.jinwoo.catchmindandroid.contract.SubMainContract
 import com.jinwoo.catchmindandroid.presenter.SubMainPresenter
 import com.jinwoo.catchmindandroid.util.AutoDrawClass
 import com.jinwoo.catchmindandroid.ui.dialog.EndDialog
+import com.jinwoo.catchmindandroid.util.DrawClass
+import com.jinwoo.catchmindandroid.util.SocketApplication
+import dagger.android.support.DaggerAppCompatActivity
+import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_main_sub.*
 import org.jetbrains.anko.startActivity
 import java.util.*
+import javax.inject.Inject
 
-class SubMainActivity : AppCompatActivity(), SubMainContract.View {
+class SubMainActivity : DaggerAppCompatActivity(), SubMainContract.View {
 
     private lateinit var presenter: SubMainContract.Presenter
 
     var timeCounter = 30
     var timeMinute = 1
 
-    val drawClass: AutoDrawClass by lazy { AutoDrawClass(this) }
+    @Inject
+    lateinit var socket: Socket
+
+    @Inject
+    lateinit var gameData: GameData
+
+    @Inject
+    lateinit var drawClass: DrawClass
 
     val timerHandler = @SuppressLint("HandlerLeak")
     object: Handler() {
@@ -37,7 +49,7 @@ class SubMainActivity : AppCompatActivity(), SubMainContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_sub)
-        presenter = SubMainPresenter(this)
+        presenter = SubMainPresenter(this, socket, gameData)
         presenter.socketLogicSetting()
         drawlayout.addView(drawClass)
         timer()

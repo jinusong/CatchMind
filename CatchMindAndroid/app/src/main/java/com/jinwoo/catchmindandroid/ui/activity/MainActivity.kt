@@ -1,6 +1,7 @@
 package com.jinwoo.catchmindandroid.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -13,18 +14,29 @@ import com.jinwoo.catchmindandroid.R
 import com.jinwoo.catchmindandroid.contract.MainContact
 import com.jinwoo.catchmindandroid.util.DrawClass
 import com.jinwoo.catchmindandroid.ui.dialog.EndDialog
+import com.jinwoo.catchmindandroid.util.SocketApplication
+import dagger.android.support.DaggerAppCompatActivity
+import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import java.util.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainContact.View {
+class MainActivity : DaggerAppCompatActivity(), MainContact.View {
 
     private lateinit var presenter: MainContact.Presenter
 
     var timeCounter = 30
     var timeMinute = 1
 
-    val drawClass: DrawClass by lazy { DrawClass(this) }
+    @Inject
+    lateinit var socket: Socket
+
+    @Inject
+    lateinit var gameData: GameData
+
+    @Inject
+    lateinit var drawClass: DrawClass
 
     val timerHandler = @SuppressLint("HandlerLeak")
     object: Handler() {
@@ -37,7 +49,7 @@ class MainActivity : AppCompatActivity(), MainContact.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        presenter = MainPresenter(this)
+        presenter = MainPresenter(this, socket, gameData)
         presenter.socketLogicSetting()
         drawlayout.addView(drawClass)
         timer()

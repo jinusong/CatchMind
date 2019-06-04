@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -34,8 +36,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    testImplementation 'com.jraska.livedata:testing:0.6.0'
-    testImplementation 'com.jraska.livedata:testing-ktx:0.6.0'
+    // dagger2
+    kapt "com.google.dagger:dagger-android-processor:2.22.1"
+    kapt "com.google.dagger:dagger-compiler:2.22.1"
+    kapt 'com.google.dagger:dagger-android-support:2.21'
+
+    implementation 'com.google.dagger:dagger:2.22.1'
+    implementation 'com.google.dagger:dagger-android:2.22.1'
+    implementation 'com.google.dagger:dagger-android-support:2.22.1'
 
     implementation ('io.socket:socket.io-client:1.0.0') {
         // excluding org.json which is provided by Android

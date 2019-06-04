@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.jinwoo.catchmindandroid.R
+import dagger.android.support.DaggerAppCompatActivity
 import org.jetbrains.anko.startActivity
 
 class StartActivity: AppCompatActivity() {

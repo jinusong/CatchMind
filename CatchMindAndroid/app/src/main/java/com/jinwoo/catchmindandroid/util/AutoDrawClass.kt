@@ -10,9 +10,7 @@ import io.socket.emitter.Emitter
 import org.json.JSONObject
 
 
-class AutoDrawClass(context: Context) : View(context) {
-
-    val socket: Socket by lazy { SocketApplication.socket }
+class AutoDrawClass(context: Context, val socket: Socket) : View(context) {
 
     val paintColor: Int = Color.parseColor("#000000")
 

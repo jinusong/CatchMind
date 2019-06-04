@@ -11,12 +11,15 @@ import com.jinwoo.catchmindandroid.util.SocketApplication
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.gg_dialog.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import javax.inject.Inject
 
 class EndDialog: DialogFragment() {
 
-    val socket: Socket = SocketApplication.socket
-    val gameData = GameData
+    @Inject
+    lateinit var socket: Socket
 
+    @Inject
+    lateinit var gameData: GameData
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.gg_dialog, container, false)
