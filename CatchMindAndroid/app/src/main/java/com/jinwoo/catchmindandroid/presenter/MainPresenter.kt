@@ -3,10 +3,13 @@ package com.jinwoo.catchmindandroid.presenter
 import com.jinwoo.catchmindandroid.contract.MainContact
 import com.jinwoo.catchmindandroid.util.GameData
 import com.jinwoo.catchmindandroid.util.SocketApplication
-import io.socket.client.Socket
 import io.socket.emitter.Emitter
 
-class MainPresenter(val view: MainContact.View, val socket: Socket, val gameData: GameData): MainContact.Presenter {
+class MainPresenter(val view: MainContact.View): MainContact.Presenter {
+
+    val socket = SocketApplication.socket
+
+    val gameData =  GameData
 
     val pass = Emitter.Listener { otherWinRound() }
     val wordData =  Emitter.Listener {

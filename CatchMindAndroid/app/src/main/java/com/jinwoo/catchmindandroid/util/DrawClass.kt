@@ -8,7 +8,8 @@ import android.graphics.Bitmap
 import io.socket.client.Socket
 import org.json.JSONObject
 
-class DrawClass(context: Context, val socket: Socket) : View(context) {
+class DrawClass(context: Context) : View(context) {
+    val socket: Socket by lazy { SocketApplication.socket }
 
     val paintColor: Int = Color.parseColor("#000000")
     var touchX = 0f
