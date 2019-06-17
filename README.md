@@ -11,3 +11,6 @@
 
 ## Server
 * Node.js, Socket.io
+
+## 결과
+![Alt Text](CatchMind.gif)
